@@ -1,0 +1,37 @@
+# Get all users.
+
+GET http://192.168.0.13:9081/simple-movies/api/users
+
+###
+
+# Get single character.
+
+GET http://192.168.0.13:9081/simple-movies/api/user/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+
+###
+
+# Get single user avatar.
+
+GET http://192.168.0.13:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+
+###
+
+# Create user avatar.
+
+PUT http://192.168.0.13:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="avatar"; filename="rob.png'
+
+< src/main/resources/rob.png
+--boundary--
+
+
+###
+
+# Delete user's avatar.
+
+DELETE http://192.168.0.13:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+
+###
