@@ -29,28 +29,19 @@ public class UserService {
      */
     private final Pbkdf2PasswordHash passwordHash;
 
-    private final UserAvatarService userAvatarService;
+    private final UserAvatarService avatarService;
 
-    private  static  final Path PATH = Paths.get("avatars/");
-
-    static
-    {
-        try {
-            Files.createDirectories(PATH);
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        }
-    }
-
+    private final Path avatarPath;
 
     /**
      * @param repository   repository for character entity
      * @param passwordHash hash mechanism used for storing users' passwords
      */
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService userAvatarService) {
+    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService avatarService, Path avatarPath) {
         this.repository = repository;
         this.passwordHash = passwordHash;
-        this.userAvatarService= userAvatarService;
+        this.avatarService = avatarService;
+        this.avatarPath = avatarPath;
 
     }
 
@@ -104,7 +95,7 @@ public class UserService {
         Optional<User> user = repository.find(id);
         if (user.isPresent()) {
             try {
-                return userAvatarService.getAvatar(user.get());
+                return avatarService.getAvatar(user.get());
             } catch (IOException e) {
                 throw new NotFoundException(e);
             }
@@ -122,7 +113,7 @@ public class UserService {
     public void updateAvatar(UUID id, InputStream is) {
         repository.find(id).ifPresent(user -> {
             try {
-                Path path = PATH.resolve(id.toString() + ".png");
+                Path path = avatarPath.resolve(id.toString() + ".png");
                 Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
                 user.setAvatarPath(path.toString());
                 //userAvatarService.saveAvatar(user, path.toString());
@@ -141,7 +132,7 @@ public class UserService {
     public void deleteAvatar(UUID id) {
         repository.find(id).ifPresentOrElse(user -> {
             try {
-                Path path = PATH.resolve(id.toString() + ".png");
+                Path path = avatarPath.resolve(id.toString() + ".png");
                 if (!Files.exists(path)) {
                     throw new NotFoundException("Avatar not found");
                 }
