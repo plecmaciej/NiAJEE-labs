@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,7 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 
 @ApplicationScoped
+@NoArgsConstructor(force = true)
 public class UserAvatarService {
     /**
      * Path to folder where avatars are stored.
@@ -23,8 +25,8 @@ public class UserAvatarService {
     private final String fileStorePath;
 
     @Inject
-    public UserAvatarService() {
-        this.fileStorePath = "C:\\Users\\jaMPe\\inteliJ\\NiAJEE\\lab2\\avatars";
+    public UserAvatarService(ServletContext servletContext) {
+        this.fileStorePath = servletContext.getInitParameter("avatars_path");
     }
 
     public byte[] getAvatar(User user) throws IOException {

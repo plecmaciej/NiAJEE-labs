@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.user.controller.api.UserController;
+import org.example.movieType.controller.api.MovieTypeController;
+import org.example.movie.controller.api.MovieController;
 import jakarta.inject.Inject;
 
 import java.io.IOException;
@@ -30,6 +32,10 @@ public class ApiServlet extends HttpServlet {
      * Controller for managing collections characters' representations.
      */
     private final UserController userController;
+
+    private final MovieTypeController movieTypeController;
+
+    private final MovieController movieController;
 
 
     public static final class Paths {
@@ -63,7 +69,13 @@ public class ApiServlet extends HttpServlet {
 
         public static final Pattern USER_AVATAR = Pattern.compile("/users/(%s)/avatar".formatted(UUID.pattern()));
 
+        public static final Pattern MOVIE_TYPES = Pattern.compile("/movieTypes/?");
 
+        public static final Pattern MOVIE_TYPE = Pattern.compile("/movieTypes/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern MOVIES = Pattern.compile("/movies/?");
+
+        public static final Pattern MOVIE = Pattern.compile("/movie/(%s)".formatted(UUID.pattern()));
 
     }
 
@@ -76,8 +88,10 @@ public class ApiServlet extends HttpServlet {
 
 
     @Inject
-    public ApiServlet(UserController userController) {
+    public ApiServlet(UserController userController, MovieTypeController movieTypeController, MovieController movieController) {
         this.userController = userController;
+        this.movieTypeController = movieTypeController;
+        this.movieController = movieController;
     }
 
     @Override
@@ -110,6 +124,24 @@ public class ApiServlet extends HttpServlet {
                 byte[] avatar = userController.getUserAvatar(uuid);
                 response.setContentLength(avatar.length);
                 response.getOutputStream().write(avatar);
+                return;
+            } else if (path.matches(Patterns.MOVIE_TYPES.pattern())) {
+                response.setContentType("application/json");
+                response.getWriter().write(jsonb.toJson(movieTypeController.getMovieTypes()));
+                return;
+            } else if (path.matches(Patterns.MOVIE_TYPE.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.MOVIE_TYPE, path);
+                response.getWriter().write(jsonb.toJson(movieTypeController.getMovieType(uuid)));
+                return;
+            } else if (path.matches(Patterns.MOVIES.pattern())) {
+                response.setContentType("application/json");
+                response.getWriter().write(jsonb.toJson(movieController.getMovies()));
+                return;
+            } else if (path.matches(Patterns.MOVIE.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.MOVIE, path);
+                response.getWriter().write(jsonb.toJson(movieController.getMovie(uuid)));
                 return;
             }
         }

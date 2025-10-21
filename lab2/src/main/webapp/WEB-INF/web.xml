@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>avatars_path</param-name>
-        <param-value>C:\Users\jaMPe\inteliJ\NiAJEE\lab1\avatars</param-value>
+        <param-value>C:\Users\jaMPe\inteliJ\NiAJEE\lab2\avatars</param-value>
     </context-param>
 
 </web-app>

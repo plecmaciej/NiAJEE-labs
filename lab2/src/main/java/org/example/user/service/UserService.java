@@ -1,5 +1,6 @@
 package org.example.user.service;
 
+import jakarta.servlet.ServletContext;
 import org.example.crypto.component.Pbkdf2PasswordHash;
 import org.example.user.entity.User;
 import org.example.user.repository.api.UserRepository;
@@ -7,6 +8,7 @@ import org.example.controller.servlet.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import jakarta.servlet.ServletContext;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,11 +45,11 @@ public class UserService {
      * @param passwordHash hash mechanism used for storing users' passwords
      */
     @Inject
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService avatarService) {
+    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService avatarService, ServletContext servletContext) {
         this.repository = repository;
         this.passwordHash = passwordHash;
         this.avatarService = avatarService;
-        this.avatarPath = Paths.get("C:\\Users\\jaMPe\\inteliJ\\NiAJEE\\lab2\\avatars");
+        this.avatarPath = Paths.get(servletContext.getInitParameter("avatars_path"));
 
     }
 

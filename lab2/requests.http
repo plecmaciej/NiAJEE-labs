@@ -1,24 +1,24 @@
 # Get all users.
 
-GET http://legionmaciek:9081/simple-movies/api/users
+GET http://localhost:9081/simple-movies/api/users
 
 ###
 
 # Get single character.
 
-GET http://legionmaciek:9081/simple-movies/api/user/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+GET http://localhost:9081/simple-movies/api/user/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
 
 ###
 
 # Get single user avatar.
 
-GET http://legionmaciek:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+GET http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
 
 ###
 
 # Create user avatar.
 
-PUT http://legionmaciek:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+PUT http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
@@ -32,6 +32,28 @@ Content-Disposition: form-data; name="avatar"; filename="rob.png'
 
 # Delete user's avatar.
 
-DELETE http://legionmaciek:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+DELETE http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
 
 ###
+
+# Get all movie types.
+
+GET http://localhost:9081/simple-movies/api/movieTypes
+
+###
+
+# Get single movie type.
+
+GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0
+
+###
+
+# Get all movies.
+
+GET http://localhost:9081/simple-movies/api/movies
+
+###
+
+# Get single movie.
+
+GET http://localhost:9081/simple-movies/api/movie/d8422238-ce90-4c9b-87ec-cd75f2bb32f3

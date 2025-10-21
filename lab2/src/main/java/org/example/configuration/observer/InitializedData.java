@@ -1,5 +1,11 @@
 package org.example.configuration.observer;
 
+import org.example.movie.entity.EnumMovie;
+import org.example.movie.entity.Movie;
+import org.example.movie.service.MovieService;
+import org.example.movieType.entity.MovieType;
+import org.example.movieType.entity.EnumMovieType;
+import org.example.movieType.service.MovieTypeService;
 import org.example.user.entity.User;
 import org.example.user.service.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,6 +31,10 @@ public class InitializedData {
      */
     private final UserService userService;
 
+    private final MovieTypeService movieTypeService;
+
+    private final MovieService movieService;
+
     /**
      * The CDI container provides a built-in instance of {@link RequestContextController} that is dependent scoped for
      * the purposes of activating and deactivating.
@@ -37,8 +47,10 @@ public class InitializedData {
      * @param requestContextController CDI request context controller
      */
     @Inject
-    public InitializedData(UserService userService, RequestContextController requestContextController) {
+    public InitializedData(UserService userService,MovieTypeService movieTypeService, MovieService movieService, RequestContextController requestContextController) {
         this.userService = userService;
+        this.movieTypeService = movieTypeService;
+        this.movieService = movieService;
         this.requestContextController = requestContextController;
     }
 
@@ -106,11 +118,71 @@ public class InitializedData {
 
         // Save users
         userService.create(admin);
-        userService.updateAvatar(admin.getId(), this.getClass().getResourceAsStream("/admin.png"));
+        userService.updateAvatar(admin.getId(), this.getClass().getResourceAsStream("/rob.png"));
         userService.create(emily);
         userService.create(daniel);
         userService.create(sophia);
         userService.create(michael);
+
+
+        MovieType horror = MovieType.builder()
+                .id(UUID.fromString("47fc4252-9c4e-4b61-8042-05648be14bc0"))
+                .typeName("Horror slasher")
+                .description("Usually group of people trying to survive serial killer.")
+                .age(EnumMovieType.Age.ADULTS)
+                .build();
+
+        MovieType comedy = MovieType.builder()
+                .id(UUID.fromString("fe6946e8-db8c-4ffe-ac7a-b457372e65aa"))
+                .typeName("Comedy")
+                .description("Family comedy")
+                .age(EnumMovieType.Age.CHILDRENS)
+                .build();
+
+        MovieType drama = MovieType.builder()
+                .id(UUID.fromString("bbb60000-1a7d-45cb-b6ac-3812c8f8eb3d"))
+                .typeName("Drama")
+                .description("Romeo and juliet type movies.")
+                .age(EnumMovieType.Age.TEENAGERS)
+                .build();
+
+        movieTypeService.create(horror);
+        movieTypeService.create(comedy);
+        movieTypeService.create(drama);
+
+        Movie it = Movie.builder()
+                .id(UUID.fromString("d8422238-ce90-4c9b-87ec-cd75f2bb32f3"))
+                .title("It")
+                .status(EnumMovie.Status.AVAILABLE)
+                .releaseDate(LocalDate.of(2017, 1, 1))
+                .price(40.20)
+                .MovieType(horror)
+                .user(admin)
+                .build();
+
+        Movie romeo = Movie.builder()
+                .id(UUID.fromString("c2776082-6691-44e8-a9d9-1f405637d226"))
+                .title("Romeo and Juliett")
+                .status(EnumMovie.Status.BORROWED)
+                .releaseDate(LocalDate.of(2013, 1, 1))
+                .price(13.25)
+                .MovieType(drama)
+                .user(admin)
+                .build();
+
+        Movie smile = Movie.builder()
+                .id(UUID.fromString("289b0034-2a5f-49e1-8701-81d5b3cf63b9"))
+                .title("Smile")
+                .status(EnumMovie.Status.RESERVED)
+                .releaseDate(LocalDate.of(2017, 1, 1))
+                .price(60.02)
+                .MovieType(comedy)
+                .user(admin)
+                .build();
+
+        movieService.create(it);
+        movieService.create(romeo);
+        movieService.create(smile);
 
         requestContextController.deactivate();
     }
