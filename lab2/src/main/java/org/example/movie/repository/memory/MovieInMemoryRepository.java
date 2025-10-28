@@ -3,12 +3,14 @@ package org.example.movie.repository.memory;
 import org.example.datastore.component.DataStore;
 import org.example.movie.entity.Movie;
 import org.example.movie.repository.api.MovieRepository;
+import org.example.movieType.entity.MovieType;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Repository for Movie entity. Repositories should be used in business layer (e.g.: in services).
@@ -34,9 +36,16 @@ public class MovieInMemoryRepository implements MovieRepository {
     }
 
     @Override
+    public List<Movie> findAllByMovieType(MovieType movieType) {
+        return store.findAllMovies().stream()
+                .filter(movie -> movieType.equals(movie.getMovieType()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Movie> find(UUID id) {
         return store.findAllMovies().stream()
-                .filter(Movie -> Movie.getId().equals(id))
+                .filter(movie -> movie.getId().equals(id))
                 .findFirst();
     }
 

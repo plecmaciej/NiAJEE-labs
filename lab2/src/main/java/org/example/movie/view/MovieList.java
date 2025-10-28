@@ -1,0 +1,118 @@
+package org.example.movie.view;
+
+import org.example.component.ModelFunctionFactory;
+import org.example.movie.model.MoviesModel;
+import org.example.movie.service.MovieService;
+import org.example.movieType.entity.MovieType;
+import org.example.movieType.service.MovieTypeService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * View bean for rendering list of movies.
+ */
+@RequestScoped
+@Named
+public class MovieList {
+
+    /**
+     * Service for managing movies.
+     */
+    private final MovieService movieService;
+
+    /**
+     * Service for managing movie types.
+     */
+    private final MovieTypeService movieTypeService;
+
+    /**
+     * Movies list exposed to the view.
+     */
+    private MoviesModel movies;
+
+    /**
+     * Id of the selected movie type.
+     */
+    @Getter
+    @Setter
+    private UUID movieTypeId;
+
+    /**
+     * Description of the selected movie type.
+     */
+    @Getter
+    @Setter
+    private String movieTypeDescription;
+
+    /**
+     * Factory producing functions for conversion between models and entities.
+     */
+    private final ModelFunctionFactory factory;
+
+
+    /**
+     * @param movieService     movie service
+     * @param movieTypeService movie type service
+     * @param factory               factory producing functions for conversion between models and entities
+     */
+    @Inject
+    public MovieList(MovieService movieService, MovieTypeService movieTypeService, ModelFunctionFactory factory) {
+        this.movieService = movieService;
+        this.movieTypeService = movieTypeService;
+        this.factory = factory;
+    }
+
+    /**
+     * In order to prevent calling service on different steps of JSF request lifecycle, model property is cached using
+     * lazy getter.
+     *
+     * @return all movies
+     */
+    public MoviesModel getMovies() {
+        if (movies == null) {
+            Optional<MovieType> movieType = movieTypeService.find(movieTypeId);
+            if (movieType.isPresent()) {
+                movies = factory.moviesToModel().apply(movieService.findAll(movieType.get()));
+            } else {
+                movies = factory.moviesToModel().apply(movieService.findAll());
+            }
+        }
+        return movies;
+    }
+
+    public void init() {
+        if (movieTypeId == null) {
+            movieTypeDescription = "All movies";
+
+        } else {
+            Optional<MovieType> movieType = movieTypeService.find(movieTypeId);
+            if (movieType.isPresent()) {
+                movieTypeDescription = movieType.get().getDescription();
+            } else {
+                movieTypeDescription = "All movies";
+            }
+        }
+    }
+
+    /**
+     * Action for clicking delete action.
+     *
+     * @param movie movie to be removed
+     * @return navigation case to list_movies
+     */
+    public String deleteAction(MoviesModel.Movie movie) {
+        System.out.println(movieTypeId);
+        movieService.delete(movie.getId());
+        if (movieTypeId == null) {
+            return "movie_list?faces-redirect=true";
+        } else {
+            return "movie_list?faces-redirect=true&movie-type-id=" + movieTypeId;
+        }
+    }
+}
