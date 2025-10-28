@@ -1,11 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+<f:metadata>
+    <f:viewAction action="#{movieCreate.init()}"/>
+</f:metadata>
+
+<ui:define name="content">
+    <article>
+        <header><h2>Create movie</h2></header>
+        <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <div class="form-outline">
+                        <h:inputText id="title" value="#{movieCreate.movie.title}" styleClass="form-control"/>
+                        <h:outputLabel for="title" value="Title:" styleClass="form-label"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <div class="form-outline">
+                        <h:inputText id="director" value="#{movieCreate.movie.director}" styleClass="form-control"/>
+                        <h:outputLabel for="director" value="Director:" styleClass="form-label"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <div class="form-outline">
+                        <h:inputText id="price" value="#{movieCreate.movie.price}" styleClass="form-control"/>
+                        <h:outputLabel for="price" value="Price:" styleClass="form-label"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <div class="form-outline">
+                        <h:inputText id="releaseDate" value="#{movieCreate.movie.releaseDate}" styleClass="form-control">
+                            <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                        <h:outputLabel for="releaseDate" value="Release Date:" styleClass="form-label"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <div class="form-outline">
+                        Status:
+                        <h:selectOneMenu value="#{movieCreate.movie.status}">
+                            <f:selectItems value="#{movieCreate.statuses}" />
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-4 p-2">
+                    <fieldset>
+                        <legend class="form-label fs-6">Movie Type:</legend>
+                        <!-- Instead of ui:repeat the h:selectOneRadio with f:selectItems can be used but then
+                        Faces renders table or list and custom styling with CSS libraties can be troublesome. -->
+                        <!--                            <ui:repeat value="#{movieCreate.movieTypes}" var="movieType">-->
+                        <!--                                <div class="form-check">-->
+                        <!--                                    <h:selectOneRadio id="radioId" group="movieeType"-->
+                        <!--                                                      value="#{movieCreate.movie.movieType}"-->
+                        <!--                                                      styleClass="form-check-input"-->
+                        <!--                                                      enabledClass="form-check-label">-->
+                        <!--                                        <f:selectItem itemValue="#{movieType}" itemLabel="#{movieType.typeName}"/>-->
+                        <!--                                    </h:selectOneRadio>-->
+                        <!--                                </div>-->
+                        <!--                            </ui:repeat>-->
+                        <h:selectOneMenu value="#{movieCreate.movie.movieType}">
+                            <f:selectItems value="#{movieCreate.movieTypes}" var="movieType" itemValue="#{movieType}" itemLabel="#{movieType.typeName}"/>
+                        </h:selectOneMenu>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-2 p-2 text-center">
+                    <h:commandButton styleClass="btn btn-primary" value="Create" action="#{movieCreate.saveAction()}"/>
+                </div>
+                <div class="col-2 p-2 text-center">
+                    <h:commandButton styleClass="btn btn-secondary" value="Cancel" action="#{movieCreate.cancelAction()}"/>
+                </div>
+            </div>
+        </h:form>
+    </article>
+</ui:define>
+
+</ui:composition>

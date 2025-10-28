@@ -85,6 +85,16 @@ public class MovieService {
      *
      * @param id movie's id
      */
+
+    /**
+     * Updates existing motorcycle in the data store.
+     *
+     * @param movie motorcycle to be updated
+     */
+    public void update(Movie movie) {
+        movieRepository.update(movie);
+    }
+
     public void delete(UUID id) {
         movieRepository.delete(movieRepository.find(id).orElseThrow());
     }

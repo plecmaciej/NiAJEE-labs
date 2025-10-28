@@ -1,9 +1,11 @@
 package org.example.movie.view;
 
 import org.example.component.ModelFunctionFactory;
+import org.example.movie.entity.EnumMovie;
 import org.example.movie.model.MoviesModel;
 import org.example.movie.service.MovieService;
 import org.example.movieType.entity.MovieType;
+import org.example.movieType.entity.EnumMovieType;
 import org.example.movieType.service.MovieTypeService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -50,6 +52,10 @@ public class MovieList {
     @Setter
     private String movieTypeDescription;
 
+    @Getter
+    @Setter
+    private EnumMovieType.Age[] movieTypeAges;
+
     /**
      * Factory producing functions for conversion between models and entities.
      */
@@ -89,11 +95,13 @@ public class MovieList {
     public void init() {
         if (movieTypeId == null) {
             movieTypeDescription = "All movies";
+            movieTypeAges = EnumMovieType.Age.values();
 
         } else {
             Optional<MovieType> movieType = movieTypeService.find(movieTypeId);
             if (movieType.isPresent()) {
                 movieTypeDescription = movieType.get().getDescription();
+                movieTypeAges = EnumMovieType.Age.values();
             } else {
                 movieTypeDescription = "All movies";
             }
