@@ -15,6 +15,7 @@ import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;

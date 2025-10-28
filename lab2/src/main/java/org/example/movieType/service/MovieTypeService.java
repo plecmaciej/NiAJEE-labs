@@ -1,5 +1,7 @@
 package org.example.movieType.service;
 
+import org.example.movie.entity.Movie;
+import org.example.movie.repository.api.MovieRepository;
 import org.example.movieType.entity.MovieType;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -11,46 +13,69 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Service layer for all business actions regarding MovieType entity.
+ * Service layer for all business actions regarding movieType entity.
  */
 @ApplicationScoped
 @NoArgsConstructor(force = true)
 public class MovieTypeService {
 
     /**
-     * Repository for MovieType entity.
+     * Repository for movieType entity.
      */
-    private final MovieTypeRepository repository;
+    private final MovieTypeRepository movieTypeRepository;
 
     /**
-     * @param repository repository for MovieType entity
+     * Repository for movie entity.
+     */
+    private final MovieRepository movieRepository;
+
+    /**
+     * @param movieTypeRepository repository for movieType entity
+     * @param movieRepository     repository for movie entity
      */
     @Inject
-    public MovieTypeService(MovieTypeRepository repository) {
-        this.repository = repository;
+    public MovieTypeService(MovieTypeRepository movieTypeRepository, MovieRepository movieRepository) {
+        this.movieTypeRepository = movieTypeRepository;
+        this.movieRepository = movieRepository;
     }
 
     /**
-     * @param id MovieType's id
-     * @return container with MovieType entity
+     * @param id movieType's id
+     * @return container with movieType entity
      */
     public Optional<MovieType> find(UUID id) {
-        return repository.find(id);
+        return movieTypeRepository.find(id);
     }
 
     /**
-     * @return all available MovieTypes
+     * @return all available movieTypes
      */
     public List<MovieType> findAll() {
-        return repository.findAll();
+        return movieTypeRepository.findAll();
     }
 
     /**
-     * Stores new MovieType in the data store.
+     * Stores new movieType in the data store.
      *
-     * @param MovieType new MovieType to be saved
+     * @param movieType new movieType to be saved
      */
-    public void create(MovieType MovieType) {
-        repository.create(MovieType);
+    public void create(MovieType movieType) {
+        movieTypeRepository.create(movieType);
+    }
+
+    /**
+     * Deletes movieType from the data store.
+     *
+     * @param id movieType's id to be deleted
+     */
+    public void delete(UUID id) {
+        MovieType movieType = movieTypeRepository.find(id).orElseThrow();
+        List<Movie> movies = movieRepository.findAllByMovieType(movieType);
+        if (!movies.isEmpty()) {
+            for (Movie movie : movies) {
+                movieRepository.delete(movie);
+            }
+        }
+        movieTypeRepository.delete(movieType);
     }
 }

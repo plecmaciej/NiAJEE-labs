@@ -2,6 +2,7 @@ package org.example.movie.service;
 
 import org.example.movie.entity.Movie;
 import org.example.movie.repository.api.MovieRepository;
+import org.example.movieType.entity.MovieType;
 import org.example.movieType.repository.api.MovieTypeRepository;
 import org.example.user.repository.api.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,21 +14,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Service layer for all business actions regarding Movie entity.
+ * Service layer for all business actions regarding movie entity.
  */
 @ApplicationScoped
 @NoArgsConstructor(force = true)
 public class MovieService {
 
     /**
-     * Repository for Movie entity.
+     * Repository for movie entity.
      */
-    private final MovieRepository MovieRepository;
+    private final MovieRepository movieRepository;
 
     /**
-     * Repository for MovieType entity.
+     * Repository for movieType entity.
      */
-    private final MovieTypeRepository MovieTypeRepository;
+    private final MovieTypeRepository movieTypeRepository;
 
     /**
      * Repository for user entity.
@@ -35,50 +36,67 @@ public class MovieService {
     private final UserRepository userRepository;
 
     /**
-     * @param MovieRepository     repository for Movie entity
-     * @param MovieTypeRepository repository for MovieType entity
+     * @param movieRepository     repository for movie entity
+     * @param movieTypeRepository repository for movieType entity
      * @param userRepository           repository for user entity
      */
     @Inject
-    public MovieService(MovieRepository MovieRepository, MovieTypeRepository MovieTypeRepository, UserRepository userRepository) {
-        this.MovieRepository = MovieRepository;
-        this.MovieTypeRepository = MovieTypeRepository;
+    public MovieService(MovieRepository movieRepository, MovieTypeRepository movieTypeRepository, UserRepository userRepository) {
+        this.movieRepository = movieRepository;
+        this.movieTypeRepository = movieTypeRepository;
         this.userRepository = userRepository;
     }
 
     /**
-     * Finds single Movie.
+     * Finds single movie.
      *
-     * @param id Movie's id
-     * @return container with Movie
+     * @param id movie's id
+     * @return container with movie
      */
     public Optional<Movie> find(UUID id) {
-        return MovieRepository.find(id);
+        return movieRepository.find(id);
     }
 
     /**
-     * @return all available Movies
+     * @return all available movies
      */
     public List<Movie> findAll() {
-        return MovieRepository.findAll();
+        return movieRepository.findAll();
     }
 
     /**
-     * Stores new Movie in the data store.
-     *
-     * @param Movie new Movie to be saved
+     * @return all available movies by movie type
      */
-    public void create(Movie Movie) {
-        MovieRepository.create(Movie);
+    public List<Movie> findAll(MovieType movieType) {
+        return movieRepository.findAllByMovieType(movieType);
     }
 
     /**
-     * Deletes Movie from the data store.
+     * Stores new movie in the data store.
      *
-     * @param id Movie's id
+     * @param movie new movie to be saved
      */
+    public void create(Movie movie) {
+        movieRepository.create(movie);
+    }
+
+    /**
+     * Deletes movie from the data store.
+     *
+     * @param id movie's id
+     */
+
+    /**
+     * Updates existing motorcycle in the data store.
+     *
+     * @param movie motorcycle to be updated
+     */
+    public void update(Movie movie) {
+        movieRepository.update(movie);
+    }
+
     public void delete(UUID id) {
-        MovieRepository.delete(MovieRepository.find(id).orElseThrow());
+        movieRepository.delete(movieRepository.find(id).orElseThrow());
     }
 
 }

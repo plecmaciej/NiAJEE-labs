@@ -48,7 +48,7 @@ public class MovieTypeInMemoryRepository implements MovieTypeRepository {
 
     @Override
     public void delete(MovieType entity) {
-        throw new UnsupportedOperationException("Operation not implemented.");
+        store.deleteMovieType(entity.getId());
     }
 
     @Override
