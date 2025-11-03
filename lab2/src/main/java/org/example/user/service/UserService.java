@@ -4,11 +4,10 @@ import jakarta.servlet.ServletContext;
 import org.example.crypto.component.Pbkdf2PasswordHash;
 import org.example.user.entity.User;
 import org.example.user.repository.api.UserRepository;
-import org.example.controller.servlet.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.NotFoundException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,7 +48,7 @@ public class UserService {
         this.repository = repository;
         this.passwordHash = passwordHash;
         this.avatarService = avatarService;
-        this.avatarPath = Paths.get(servletContext.getInitParameter("avatars_path"));
+        this.avatarPath = Paths.get(servletContext.getInitParameter("avatar_path"));
 
     }
 

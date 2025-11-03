@@ -53,6 +53,6 @@ public class MovieTypeInMemoryRepository implements MovieTypeRepository {
 
     @Override
     public void update(MovieType entity) {
-        throw new UnsupportedOperationException("Operation not implemented.");
+        store.updateMovieType(entity);
     }
 }

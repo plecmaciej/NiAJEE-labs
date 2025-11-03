@@ -79,9 +79,17 @@ public class DataStore {
         MovieTypes.add(cloningUtility.clone(value));
     }
 
+    public synchronized void updateMovieType(MovieType value) throws IllegalArgumentException {
+        if (MovieTypes.removeIf(movieType -> movieType.getId().equals(value.getId()))) {
+            MovieTypes.add(cloningUtility.clone(value));
+        } else {
+            throw new IllegalArgumentException("The movie type with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
     public synchronized void deleteMovieType(UUID id) throws IllegalArgumentException {
-        if (!MovieTypes.removeIf(motorcycleType -> motorcycleType.getId().equals(id))) {
-            throw new IllegalArgumentException("The motorcycle type with id \"%s\" does not exist".formatted(id));
+        if (!MovieTypes.removeIf(movieType -> movieType.getId().equals(id))) {
+            throw new IllegalArgumentException("The movie type with id \"%s\" does not exist".formatted(id));
         }
     }
 

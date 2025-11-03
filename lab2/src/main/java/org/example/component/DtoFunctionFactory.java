@@ -2,12 +2,12 @@ package org.example.component;
 
 import org.example.movie.dto.function.MovieToResponseFunction;
 import org.example.movie.dto.function.MoviesToResponseFunction;
-import org.example.movie.dto.GetMoviesResponse;
-import org.example.movie.dto.GetMovieResponse;
 import org.example.movieType.dto.function.MovieTypeToResponseFunction;
 import org.example.movieType.dto.GetMovieTypeResponse;
 import org.example.movieType.dto.GetMovieTypesResponse;
 import org.example.movieType.dto.function.MovieTypesToResponseFunction;
+import org.example.movieType.dto.function.RequestToMovieTypeFunction;
+import org.example.movieType.dto.function.UpdateMovieTypeWithRequestFunction;
 import org.example.movieType.entity.MovieType;
 import org.example.user.dto.function.UserToResponseFunction;
 import org.example.user.dto.GetUserResponse;
@@ -53,6 +53,7 @@ public class DtoFunctionFactory {
         return new MovieTypeToResponseFunction();
     }
 
+
     /**
      * Returns a function to convert a list of {@link MovieType} to {@link GetMovieTypesResponse}.
      */
@@ -60,6 +61,25 @@ public class DtoFunctionFactory {
         return new MovieTypesToResponseFunction();
     }
 
+
+
+    /**
+     * Returns a function to convert a single {@link MovieType} to {@link GetMovieTypeResponse}.
+     *
+     * @return MovieTypeToResponseFunction instance
+     */
+    public RequestToMovieTypeFunction requestToMovieType() {
+        return new RequestToMovieTypeFunction();
+    }
+
+    /**
+     * Returns a function to convert a single {@link MovieType} to {@link GetMovieTypeResponse}.
+     *
+     * @return UpdateMovieTypeWithRequestFunction instance
+     */
+    public UpdateMovieTypeWithRequestFunction updateMovieType() {
+        return new UpdateMovieTypeWithRequestFunction();
+    }
     /**
      * Returns a function to convert a single {@link Movie} to {@link GetMovieResponse}.
      *

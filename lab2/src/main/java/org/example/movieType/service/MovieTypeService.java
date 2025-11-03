@@ -64,6 +64,14 @@ public class MovieTypeService {
     }
 
     /**
+     * Updates movieType in the data store.
+     *
+     * @param movieType movieType to be updated
+     */
+    public void update(MovieType movieType) {
+        movieTypeRepository.update(movieType);
+    }
+    /**
      * Deletes movieType from the data store.
      *
      * @param id movieType's id to be deleted

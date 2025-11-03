@@ -1,8 +1,6 @@
 package org.example.movie.controller.simple;
 
 import org.example.component.DtoFunctionFactory;
-import org.example.controller.servlet.exception.BadRequestException;
-import org.example.controller.servlet.exception.NotFoundException;
 import org.example.movie.controller.api.MovieController;
 import org.example.movie.dto.GetMovieResponse;
 import org.example.movie.dto.GetMoviesResponse;
@@ -10,6 +8,7 @@ import org.example.movie.dto.function.PutMovieRequest;
 import org.example.movie.service.MovieService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.UUID;
 
