@@ -71,6 +71,11 @@ public class MovieService {
         return movieRepository.findAllByMovieType(movieType);
     }
 
+
+    public Optional<List<Movie>> findAllByMovieType(UUID id) {
+        return movieTypeRepository.find(id)
+                .map(movieRepository::findAllByMovieType);
+    }
     /**
      * Stores new movie in the data store.
      *
@@ -87,9 +92,9 @@ public class MovieService {
      */
 
     /**
-     * Updates existing motorcycle in the data store.
+     * Updates existing movie in the data store.
      *
-     * @param movie motorcycle to be updated
+     * @param movie movie to be updated
      */
     public void update(Movie movie) {
         movieRepository.update(movie);

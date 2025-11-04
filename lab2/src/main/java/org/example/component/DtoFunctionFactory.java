@@ -1,7 +1,8 @@
 package org.example.component;
 
-import org.example.movie.dto.function.MovieToResponseFunction;
-import org.example.movie.dto.function.MoviesToResponseFunction;
+import org.example.movie.dto.function.*;
+import org.example.movie.dto.PatchMovieRequest;
+import org.example.movie.dto.PutMovieRequest;
 import org.example.movieType.dto.function.MovieTypeToResponseFunction;
 import org.example.movieType.dto.GetMovieTypeResponse;
 import org.example.movieType.dto.GetMovieTypesResponse;
@@ -95,6 +96,24 @@ public class DtoFunctionFactory {
      */
     public MoviesToResponseFunction MoviesToResponse() {
         return new MoviesToResponseFunction();
+    }
+
+    /**
+     * Returns a function to convert a single {@link PutMovieRequest} to {@link Movie}.
+     *
+     * @return RequestToMovieFunction instance
+     */
+    public RequestToMovieFunction requestToMovie() {
+        return new RequestToMovieFunction();
+    }
+
+    /**
+     * Returns a function to convert a single {@link PatchMovieRequest} to {@link Movie}.
+     *
+     * @return RequestToMovieFunction instance
+     */
+    public UpdateMovieWithRequestFunction updateMovie() {
+        return new UpdateMovieWithRequestFunction();
     }
 
 }
