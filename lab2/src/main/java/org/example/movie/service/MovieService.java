@@ -7,6 +7,7 @@ import org.example.movieType.repository.api.MovieTypeRepository;
 import org.example.user.repository.api.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -81,7 +82,14 @@ public class MovieService {
      *
      * @param movie new movie to be saved
      */
+    @Transactional
     public void create(Movie movie) {
+        if (movieRepository.find(movie.getId()).isPresent()) {
+            throw new IllegalArgumentException("Movie already exists");
+        }
+        if (movieTypeRepository.find(movie.getMovieType().getId()).isEmpty()) {
+            throw new IllegalArgumentException("Movie type does not exist");
+        }
         movieRepository.create(movie);
     }
 
@@ -96,10 +104,12 @@ public class MovieService {
      *
      * @param movie movie to be updated
      */
+    @Transactional
     public void update(Movie movie) {
         movieRepository.update(movie);
     }
 
+    @Transactional
     public void delete(UUID id) {
         movieRepository.delete(movieRepository.find(id).orElseThrow());
     }

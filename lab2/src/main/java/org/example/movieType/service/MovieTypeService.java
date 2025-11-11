@@ -1,10 +1,9 @@
 package org.example.movieType.service;
 
-import org.example.movie.entity.Movie;
-import org.example.movie.repository.api.MovieRepository;
 import org.example.movieType.entity.MovieType;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import org.example.movieType.repository.api.MovieTypeRepository;
 
@@ -22,21 +21,15 @@ public class MovieTypeService {
     /**
      * Repository for movieType entity.
      */
-    private final MovieTypeRepository movieTypeRepository;
+    private final MovieTypeRepository repository;
+
 
     /**
-     * Repository for movie entity.
-     */
-    private final MovieRepository movieRepository;
-
-    /**
-     * @param movieTypeRepository repository for movieType entity
-     * @param movieRepository     repository for movie entity
+     * @param repository repository for movieType entity
      */
     @Inject
-    public MovieTypeService(MovieTypeRepository movieTypeRepository, MovieRepository movieRepository) {
-        this.movieTypeRepository = movieTypeRepository;
-        this.movieRepository = movieRepository;
+    public MovieTypeService(MovieTypeRepository repository) {
+        this.repository = repository;
     }
 
     /**
@@ -44,14 +37,14 @@ public class MovieTypeService {
      * @return container with movieType entity
      */
     public Optional<MovieType> find(UUID id) {
-        return movieTypeRepository.find(id);
+        return repository.find(id);
     }
 
     /**
      * @return all available movieTypes
      */
     public List<MovieType> findAll() {
-        return movieTypeRepository.findAll();
+        return repository.findAll();
     }
 
     /**
@@ -60,7 +53,7 @@ public class MovieTypeService {
      * @param movieType new movieType to be saved
      */
     public void create(MovieType movieType) {
-        movieTypeRepository.create(movieType);
+        repository.create(movieType);
     }
 
     /**
@@ -68,22 +61,18 @@ public class MovieTypeService {
      *
      * @param movieType movieType to be updated
      */
+    @Transactional
     public void update(MovieType movieType) {
-        movieTypeRepository.update(movieType);
+        repository.update(movieType);
     }
     /**
      * Deletes movieType from the data store.
      *
      * @param id movieType's id to be deleted
      */
+    @Transactional
     public void delete(UUID id) {
-        MovieType movieType = movieTypeRepository.find(id).orElseThrow();
-        List<Movie> movies = movieRepository.findAllByMovieType(movieType);
-        if (!movies.isEmpty()) {
-            for (Movie movie : movies) {
-                movieRepository.delete(movie);
-            }
-        }
-        movieTypeRepository.delete(movieType);
+        repository.delete(repository.find(id).orElseThrow());
     }
+
 }

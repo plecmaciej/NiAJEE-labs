@@ -2,9 +2,9 @@ package org.example.movie.entity;
 
 import org.example.movieType.entity.MovieType;
 import org.example.user.entity.User;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +21,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
+@Entity
+@Table(name = "movies")
 public class Movie implements Serializable {
 
+    @Id
     private UUID id;
 
     private String title;
@@ -31,14 +34,20 @@ public class Movie implements Serializable {
 
     private String director;
 
+    @Enumerated(EnumType.STRING)
     private EnumMovie.Status status;
 
+    @Column(name = "release_date")
     private LocalDate releaseDate;
 
     private double price;
 
+    @ManyToOne
+    @JoinColumn(name = "movie_type")
     private MovieType MovieType;
 
+    @ManyToOne
+    @JoinColumn(name = "user_name")
     private User user;
 
 }

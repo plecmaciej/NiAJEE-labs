@@ -1,5 +1,7 @@
 package org.example.user.entity;
 
+import org.example.movie.entity.Movie;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,11 +27,14 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
     /**
      * Unique id (primary key).
      */
+    @Id
     private UUID id;
 
     /**
@@ -50,6 +55,7 @@ public class User implements Serializable {
     /**
      * User's birthdate.
      */
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     /**
@@ -61,10 +67,20 @@ public class User implements Serializable {
     /**
      * User's contact email.
      */
+    @Column(nullable = false, unique = true)
     private String email;
 
     /**
      * User's security roles.
      */
+    @Column(name = "avatar_path")
     private String avatarPath;
+
+    /**
+     * User's list of owned movies.
+     */
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Movie> movieList;
 }
