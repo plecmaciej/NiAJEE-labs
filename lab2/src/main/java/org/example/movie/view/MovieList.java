@@ -82,8 +82,8 @@ public class MovieList {
      */
     public MoviesModel getMovies() {
         if (movies == null) {
-            Optional<MovieType> movieType = movieTypeService.find(movieTypeId);
-            if (movieType.isPresent()) {
+            if (movieTypeId != null) {
+                Optional<MovieType> movieType = movieTypeService.find(movieTypeId);
                 movies = factory.moviesToModel().apply(movieService.findAll(movieType.get()));
             } else {
                 movies = factory.moviesToModel().apply(movieService.findAll());

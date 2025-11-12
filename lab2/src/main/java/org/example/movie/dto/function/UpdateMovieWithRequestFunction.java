@@ -19,7 +19,7 @@ public class UpdateMovieWithRequestFunction implements BiFunction<Movie, PatchMo
                 .price(patchMovieRequest.getPrice())
                 .status(patchMovieRequest.getStatus())
                 .releaseDate(movie.getReleaseDate())
-                .MovieType(movie.getMovieType())
+                .movieType(movie.getMovieType())
                 .user(movie.getUser())
                 .build();
     }

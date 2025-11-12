@@ -53,6 +53,6 @@ public class GetMovieTypesResponse {
      * List of all Movie types.
      */
     @Singular
-    private List<MovieType> MovieTypes;
+    private List<MovieType> movieTypes;
 
 }

@@ -75,5 +75,5 @@ public class GetMovieResponse {
     /**
      * Movie's type.
      */
-    private MovieType MovieType;
+    private MovieType movieType;
 }

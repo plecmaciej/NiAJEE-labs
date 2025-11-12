@@ -9,12 +9,12 @@
         <feature>restfulWS-3.1</feature>
         <feature>persistence-3.1</feature>
     </featureManager>
-    <dataSource id="MotorcycleCatalogDataSource" jndiName="jdbc/MotorcycleCatalog">
+    <dataSource id="MovieCatalogDataSource" jndiName="jdbc/MovieCatalog">
         <jdbcDriver javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"
                     javax.sql.ConnectionPoolDataSource="org.h2.jdbcx.JdbcDataSource"
                     javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource"
                     libraryRef="H2JDBCLib"/>
-        <properties URL="jdbc:h2:mem:motorcycle-catalog"/>
+        <properties URL="jdbc:h2:mem:movie-catalog"/>
     </dataSource>
 
     <library id="H2JDBCLib">

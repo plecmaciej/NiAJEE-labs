@@ -158,7 +158,7 @@ public class InitializedData {
                     .status(EnumMovie.Status.AVAILABLE)
                     .releaseDate(LocalDate.of(2017, 1, 1))
                     .price(40.20)
-                    .MovieType(horror)
+                    .movieType(horror)
                     .user(admin)
                     .build();
 
@@ -168,7 +168,7 @@ public class InitializedData {
                     .status(EnumMovie.Status.BORROWED)
                     .releaseDate(LocalDate.of(2013, 1, 1))
                     .price(13.25)
-                    .MovieType(drama)
+                    .movieType(drama)
                     .user(admin)
                     .build();
 
@@ -178,7 +178,7 @@ public class InitializedData {
                     .status(EnumMovie.Status.RESERVED)
                     .releaseDate(LocalDate.of(2017, 1, 1))
                     .price(60.02)
-                    .MovieType(comedy)
+                    .movieType(comedy)
                     .user(admin)
                     .build();
 

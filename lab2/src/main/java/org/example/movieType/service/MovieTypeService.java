@@ -52,6 +52,7 @@ public class MovieTypeService {
      *
      * @param movieType new movieType to be saved
      */
+    @Transactional
     public void create(MovieType movieType) {
         repository.create(movieType);
     }

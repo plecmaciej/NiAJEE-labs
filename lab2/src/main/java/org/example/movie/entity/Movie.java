@@ -2,6 +2,7 @@ package org.example.movie.entity;
 
 import org.example.movieType.entity.MovieType;
 import org.example.user.entity.User;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class Movie implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "movie_type")
-    private MovieType MovieType;
+    private MovieType movieType;
 
     @ManyToOne
     @JoinColumn(name = "user_name")

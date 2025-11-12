@@ -14,10 +14,10 @@ public class MovieTypesToResponseFunction implements Function<List<MovieType>, G
     @Override
     public GetMovieTypesResponse apply(List<MovieType> MovieTypes) {
         return GetMovieTypesResponse.builder()
-                .MovieTypes(MovieTypes.stream()
-                        .map(MovieType -> GetMovieTypesResponse.MovieType.builder()
-                                .id(MovieType.getId())
-                                .name(MovieType.getTypeName())
+                .movieTypes(MovieTypes.stream()
+                        .map(movieType -> GetMovieTypesResponse.MovieType.builder()
+                                .id(movieType.getId())
+                                .name(movieType.getTypeName())
                                 .build())
                         .toList())
                 .build();

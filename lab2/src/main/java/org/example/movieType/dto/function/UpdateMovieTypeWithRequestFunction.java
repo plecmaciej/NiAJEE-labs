@@ -17,7 +17,7 @@ public class UpdateMovieTypeWithRequestFunction implements BiFunction<MovieType,
                 .typeName(request.getTypeName())
                 .description(request.getDescription())
                 .age(entity.getAge())
-                .Movies(entity.getMovies())
+                .movies(entity.getMovies())
                 .build();
     }
 }

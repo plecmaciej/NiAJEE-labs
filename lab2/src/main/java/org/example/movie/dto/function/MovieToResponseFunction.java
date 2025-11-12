@@ -18,7 +18,7 @@ public class MovieToResponseFunction implements Function<Movie, GetMovieResponse
                 .status(entity.getStatus())
                 .releaseDate(entity.getReleaseDate())
                 .price(entity.getPrice())
-                .MovieType(GetMovieResponse.MovieType.builder()
+                .movieType(GetMovieResponse.MovieType.builder()
                         .id(entity.getMovieType().getId())
                         .typeName(entity.getMovieType().getTypeName())
                         .build())

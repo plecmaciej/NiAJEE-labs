@@ -74,7 +74,7 @@ Content-Type: application/json
 ###
 
 # Delete existing movie type
-DELETE http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0
+DELETE http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952
 
 ###
 
@@ -86,7 +86,7 @@ GET http://localhost:9081/simple-movies/api/movies
 
 # Get single movie.
 
-GET http://localhost:9081/simple-movies/api/movie/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
+GET http://localhost:9081/simple-movies/api/movie/76658188-838c-484a-ab78-5c1316f02609
 
 ###
 
@@ -98,7 +98,7 @@ GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-0
 
 # Create new movie
 
-PUT http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies/76658188-838c-484a-ab78-5c1316f02609
+PUT http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952/movies/76658188-838c-484a-ab78-5c1316f02609
 Content-Type: application/json
 
 {
@@ -125,6 +125,6 @@ Content-Type: application/json
 
 # Delete existing movie
 
-DELETE http://localhost:9081/simple-movies/api/movies/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
+DELETE http://localhost:9081/simple-movies/api/movies/76658188-838c-484a-ab78-5c1316f02609
 
 ###

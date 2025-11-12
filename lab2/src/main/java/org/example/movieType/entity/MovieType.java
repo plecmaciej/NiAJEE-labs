@@ -56,6 +56,6 @@ public class MovieType implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "movieType", cascade = CascadeType.REMOVE)
-    List<Movie> Movies;
+    List<Movie> movies;
 
 }

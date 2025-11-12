@@ -45,5 +45,5 @@ public class PutMovieRequest {
     /**
      * Identifier of the Movie's type
      */
-    private UUID MovieType;
+    private UUID movieType;
 }

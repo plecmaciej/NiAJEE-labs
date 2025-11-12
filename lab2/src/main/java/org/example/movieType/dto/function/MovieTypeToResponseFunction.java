@@ -11,12 +11,12 @@ import java.util.function.Function;
 public class MovieTypeToResponseFunction implements Function<MovieType, GetMovieTypeResponse> {
 
     @Override
-    public GetMovieTypeResponse apply(MovieType MovieType) {
+    public GetMovieTypeResponse apply(MovieType movieType) {
         return GetMovieTypeResponse.builder()
-                .id(MovieType.getId())
-                .name(MovieType.getTypeName())
-                .description(MovieType.getDescription())
-                .age(MovieType.getAge())
+                .id(movieType.getId())
+                .name(movieType.getTypeName())
+                .description(movieType.getDescription())
+                .age(movieType.getAge())
                 .build();
     }
 

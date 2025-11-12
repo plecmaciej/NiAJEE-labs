@@ -1,23 +1,18 @@
 package org.example.user.service;
 
-import jakarta.servlet.ServletContext;
 import org.example.crypto.component.Pbkdf2PasswordHash;
 import org.example.user.entity.User;
 import org.example.user.repository.api.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import jakarta.ws.rs.NotFoundException;
+import lombok.NoArgsConstructor;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.List;
-import java.io.*;
 
 /**
  * Service layer for all business actions regarding user entity.
@@ -36,21 +31,20 @@ public class UserService {
      */
     private final Pbkdf2PasswordHash passwordHash;
 
-    private final UserAvatarService avatarService;
-
-    private final Path avatarPath;
+    /**
+     * Service for managing user avatars.
+     */
+    private final UserAvatarService userAvatarService;
 
     /**
      * @param repository   repository for character entity
      * @param passwordHash hash mechanism used for storing users' passwords
      */
     @Inject
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService avatarService, ServletContext servletContext) {
+    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService userAvatarService) {
         this.repository = repository;
         this.passwordHash = passwordHash;
-        this.avatarService = avatarService;
-        this.avatarPath = Paths.get(servletContext.getInitParameter("avatar_path"));
-
+        this.userAvatarService = userAvatarService;
     }
 
     /**
@@ -100,11 +94,17 @@ public class UserService {
                 .orElse(false);
     }
 
+    /**
+     * Get user's avatar
+     *
+     * @param id user's id
+     * @return byte array containing user's avatar
+     */
     public byte[] getAvatar(UUID id) {
         Optional<User> user = repository.find(id);
         if (user.isPresent()) {
             try {
-                return avatarService.getAvatar(user.get());
+                return userAvatarService.getAvatar(user.get());
             } catch (IOException e) {
                 throw new NotFoundException(e);
             }
@@ -114,19 +114,17 @@ public class UserService {
     }
 
     /**
-     * Updates portrait of the user.
+     * Updates avatar of the user.
      *
      * @param id user's id
-     * @param is input stream containing new portrait
+     * @param is input stream containing new avatar
      */
     @Transactional
     public void updateAvatar(UUID id, InputStream is) {
         repository.find(id).ifPresent(user -> {
             try {
-                Path path = avatarPath.resolve(id.toString() + ".png");
-                Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
-                user.setAvatarPath(path.toString());
-                //userAvatarService.saveAvatar(user, path.toString());
+                byte[] avatar = is.readAllBytes();
+                userAvatarService.saveAvatar(user, avatar);
                 repository.update(user);
             } catch (IOException e) {
                 throw new IllegalStateException(e);
@@ -135,26 +133,19 @@ public class UserService {
     }
 
     /**
-     * Deletes portrait of the user.
+     * Deletes avatar of the user.
      *
      * @param id user's id
      */
     @Transactional
     public void deleteAvatar(UUID id) {
-        repository.find(id).ifPresentOrElse(user -> {
+        repository.find(id).ifPresent(user -> {
             try {
-                Path path = avatarPath.resolve(id.toString() + ".png");
-                if (!Files.exists(path)) {
-                    throw new NotFoundException("Avatar not found");
-                }
-                Files.delete(path);
-                user.setAvatarPath(null);
-                repository.update(user);
+                userAvatarService.deleteAvatar(user);
             } catch (IOException e) {
-                throw new RuntimeException("Error deleting avatar", e);
+                throw new RuntimeException(e);
             }
-        }, () -> {
-            throw new NotFoundException("User not found");
+            repository.update(user);
         });
     }
 

@@ -8,6 +8,7 @@ import org.example.movie.dto.PatchMovieRequest;
 import org.example.movie.dto.PutMovieRequest;
 import org.example.movie.entity.Movie;
 import org.example.movie.service.MovieService;
+import org.example.movieType.entity.MovieType;
 import org.example.movieType.service.MovieTypeService;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
@@ -118,8 +119,12 @@ public class MovieRestController implements MovieController {
     public void putMovie(UUID typeId, UUID id, PutMovieRequest request) {
         try {
             Movie movie = factory.requestToMovie().apply(id, request);
-            movie.setMovieType(movieTypeService.find(typeId).orElseThrow(NotFoundException::new));
-            movieService.create(movie);
+
+            MovieType movieType = movieTypeService.find(typeId).orElseThrow(NotFoundException::new);
+            movie.setMovieType(movieType);
+            movieType.getMovies().add(movie);
+            movieTypeService.update(movieType);
+//            movieService.create(movie);
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(MovieController.class, "getMovie")
                     .build(id)

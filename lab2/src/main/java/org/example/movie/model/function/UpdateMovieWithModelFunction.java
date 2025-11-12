@@ -21,7 +21,7 @@ public class UpdateMovieWithModelFunction implements BiFunction<Movie, MovieEdit
                 .director(entity.getDirector())
                 .status(request.getStatus())
                 .releaseDate(entity.getReleaseDate())
-                .MovieType(entity.getMovieType())
+                .movieType(entity.getMovieType())
                 .build();
     }
 
