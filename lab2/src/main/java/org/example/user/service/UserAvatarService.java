@@ -1,20 +1,16 @@
 package org.example.user.service;
 
-import org.example.controller.servlet.exception.NotFoundException;
 import org.example.user.entity.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
-import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import lombok.NoArgsConstructor;
 
 @ApplicationScoped
 @NoArgsConstructor(force = true)
@@ -26,7 +22,7 @@ public class UserAvatarService {
 
     @Inject
     public UserAvatarService(ServletContext servletContext) {
-        this.fileStorePath = servletContext.getInitParameter("avatars_path");
+        this.fileStorePath = servletContext.getInitParameter("avatar_path");
     }
 
     public byte[] getAvatar(User user) throws IOException {
@@ -41,13 +37,19 @@ public class UserAvatarService {
         }
     }
 
-    public void saveAvatar(User user, String avatar) throws IOException {
+    public void saveAvatar(User user, byte[] avatar) throws IOException {
         Path rootPath = Paths.get(this.fileStorePath);
         if (!Files.exists(rootPath)) {
             Files.createDirectory(rootPath);
         }
 
-
+        Path newFolderPath = rootPath.resolve(user.getId().toString() + ".png");
+        try {
+            Files.write(newFolderPath, avatar);
+            user.setAvatarPath(newFolderPath.toString());
+        } catch (IOException e) {
+            throw new IOException("Error saving avatar", e);
+        }
     }
 
     public void deleteAvatar(User user) throws IOException {

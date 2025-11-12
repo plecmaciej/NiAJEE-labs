@@ -12,10 +12,6 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-/**
- * Represents single Movie.
- */
 @Getter
 @Setter
 @Builder
@@ -23,45 +19,18 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class GetMovieResponse {
-
+public class PutMovieRequest {
     /**
-     * Represents single Movie type.
-     */
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @ToString
-    @EqualsAndHashCode
-    public static class MovieType {
-        /**
-         * Unique id identifying Movie type.
-         */
-        private UUID id;
-
-        /**
-         * Name of the Movie type.
-         */
-        private String typeName;
-    }
-
-    /**
-     * Unique id identifying Movie.
-     */
-    private UUID id;
-
-    /**
-     * Name of the Movie.
+     * Movie's title.
      */
     private String title;
-
 
     /**
      * Movie's color.
      */
     private EnumMovie.Status status;
+
+
     /**
      * Movie's production date.
      */
@@ -72,8 +41,5 @@ public class GetMovieResponse {
      */
     private double price;
 
-    /**
-     * Movie's type.
-     */
-    private MovieType movieType;
+
 }

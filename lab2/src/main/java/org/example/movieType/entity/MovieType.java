@@ -1,6 +1,7 @@
 package org.example.movieType.entity;
 
 import org.example.movie.entity.Movie;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,16 +22,20 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
+@Entity
+@Table(name = "movie_types")
 public class MovieType implements Serializable {
 
     /**
      * Unique id (primary key).
      */
+    @Id
     private UUID id;
 
     /**
      * Name of the Movie type.
      */
+    @Column(name = "type_name")
     private String typeName;
 
     /**
@@ -41,11 +46,16 @@ public class MovieType implements Serializable {
     /**
      * Riding position of the Movie type.
      */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "age")
     private EnumMovieType.Age age;
 
     /**
      * List of Movies of this type.
      */
-    List<Movie> Movies;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "movieType", cascade = CascadeType.REMOVE)
+    List<Movie> movies;
 
 }

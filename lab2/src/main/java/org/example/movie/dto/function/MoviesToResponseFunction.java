@@ -11,7 +11,7 @@ public class MoviesToResponseFunction implements Function<List<Movie>, GetMovies
     @Override
     public GetMoviesResponse apply(List<Movie> entities) {
         return GetMoviesResponse.builder()
-                .Movies(entities.stream()
+                .movies(entities.stream()
                         .map(Movie -> GetMoviesResponse.Movie.builder()
                                 .id(Movie.getId())
                                 .title(Movie.getTitle())

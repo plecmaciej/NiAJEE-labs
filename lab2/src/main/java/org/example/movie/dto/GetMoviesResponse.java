@@ -45,5 +45,5 @@ public class GetMoviesResponse {
      * List of the selected Movies.
      */
     @Singular
-    private List<Movie> Movies;
+    private List<Movie> movies;
 }

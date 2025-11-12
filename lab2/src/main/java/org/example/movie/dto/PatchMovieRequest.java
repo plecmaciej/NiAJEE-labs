@@ -1,4 +1,4 @@
-package org.example.movie.dto.function;
+package org.example.movie.dto;
 
 import org.example.movie.entity.EnumMovie;
 import lombok.AccessLevel;
@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
-import java.util.UUID;
 @Getter
 @Setter
 @Builder
@@ -19,31 +17,20 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class PutMovieRequest {
+public class PatchMovieRequest {
     /**
-     * Movie's name.
+     * Movie's title.
      */
     private String title;
-
 
     /**
      * Movie's color.
      */
     private EnumMovie.Status status;
 
-
-    /**
-     * Movie's production date.
-     */
-    private LocalDate releaseDate;
-
     /**
      * Movie's price.
      */
     private double price;
 
-    /**
-     * Identifier of the Movie's type
-     */
-    private UUID movieType;
 }

@@ -4,9 +4,9 @@ GET http://localhost:9081/simple-movies/api/users
 
 ###
 
-# Get single character.
+# Get single user.
 
-GET http://localhost:9081/simple-movies/api/user/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+GET http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
 
 ###
 
@@ -48,6 +48,36 @@ GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-0
 
 ###
 
+# Create new movie type
+
+PUT http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952
+Content-Type: application/json
+
+{
+  "typeName": "SCI-FI",
+  "description": "A little bit of science and a little more ficiton",
+  "age": "TEENAGERS"
+}
+
+###
+
+# Update existing movie type
+
+PATCH http://localhost:9081/simple-movies/api/movieTypes/bbb60000-1a7d-45cb-b6ac-3812c8f8eb3d
+Content-Type: application/json
+
+{
+  "typeName": "Changed",
+  "description": "Changed"
+}
+
+###
+
+# Delete existing movie type
+DELETE http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952
+
+###
+
 # Get all movies.
 
 GET http://localhost:9081/simple-movies/api/movies
@@ -56,4 +86,45 @@ GET http://localhost:9081/simple-movies/api/movies
 
 # Get single movie.
 
-GET http://localhost:9081/simple-movies/api/movie/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
+GET http://localhost:9081/simple-movies/api/movie/76658188-838c-484a-ab78-5c1316f02609
+
+###
+
+# Get all movie type movies
+
+GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies
+
+###
+
+# Create new movie
+
+PUT http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952/movies/76658188-838c-484a-ab78-5c1316f02609
+Content-Type: application/json
+
+{
+  "title": "Robocop",
+  "status": "BORROWED",
+  "releaseDate": "2017-01-01",
+  "price": 600.89
+}
+
+###
+
+# Update existing movie
+
+PATCH http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
+Content-Type: application/json
+
+{
+  "title": "Changed",
+  "status": "BORROWED",
+  "price": 12.34
+}
+
+###
+
+# Delete existing movie
+
+DELETE http://localhost:9081/simple-movies/api/movies/76658188-838c-484a-ab78-5c1316f02609
+
+###

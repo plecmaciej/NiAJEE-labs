@@ -19,7 +19,7 @@ public class ModelToMovieFunction implements Function<MovieCreateModel, Movie>, 
                 .director(movieCreateModel.getDirector())
                 .releaseDate(movieCreateModel.getReleaseDate())
                 .price(movieCreateModel.getPrice())
-                .MovieType(MovieType.builder()
+                .movieType(MovieType.builder()
                         .id(movieCreateModel.getMovieType().getId())
                         .build())
                 .build();

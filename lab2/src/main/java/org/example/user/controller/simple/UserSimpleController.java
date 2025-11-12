@@ -5,12 +5,11 @@ import org.example.user.dto.GetUserResponse;
 import org.example.user.dto.GetUsersResponse;
 import org.example.user.service.UserService;
 import org.example.component.DtoFunctionFactory;
-import org.example.controller.servlet.exception.NotFoundException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.io.InputStream;
-import java.util.UUID;
 import java.util.UUID;
 
 /**

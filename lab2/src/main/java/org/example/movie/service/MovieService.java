@@ -7,6 +7,7 @@ import org.example.movieType.repository.api.MovieTypeRepository;
 import org.example.user.repository.api.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -71,12 +72,24 @@ public class MovieService {
         return movieRepository.findAllByMovieType(movieType);
     }
 
+
+    public Optional<List<Movie>> findAllByMovieType(UUID id) {
+        return movieTypeRepository.find(id)
+                .map(movieRepository::findAllByMovieType);
+    }
     /**
      * Stores new movie in the data store.
      *
      * @param movie new movie to be saved
      */
+    @Transactional
     public void create(Movie movie) {
+        if (movieRepository.find(movie.getId()).isPresent()) {
+            throw new IllegalArgumentException("Movie already exists");
+        }
+        if (movieTypeRepository.find(movie.getMovieType().getId()).isEmpty()) {
+            throw new IllegalArgumentException("Movie type does not exist");
+        }
         movieRepository.create(movie);
     }
 
@@ -87,14 +100,16 @@ public class MovieService {
      */
 
     /**
-     * Updates existing motorcycle in the data store.
+     * Updates existing movie in the data store.
      *
-     * @param movie motorcycle to be updated
+     * @param movie movie to be updated
      */
+    @Transactional
     public void update(Movie movie) {
         movieRepository.update(movie);
     }
 
+    @Transactional
     public void delete(UUID id) {
         movieRepository.delete(movieRepository.find(id).orElseThrow());
     }
