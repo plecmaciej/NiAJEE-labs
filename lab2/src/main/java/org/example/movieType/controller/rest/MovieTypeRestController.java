@@ -7,9 +7,10 @@ import org.example.movieType.dto.GetMovieTypesResponse;
 import org.example.movieType.dto.PatchMovieTypeRequest;
 import org.example.movieType.dto.PutMovieTypeRequest;
 import org.example.movieType.service.MovieTypeService;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -34,7 +35,7 @@ public class MovieTypeRestController implements MovieTypeController {
     /**
      * Service for movieType entity.
      */
-    private final MovieTypeService service;
+    private MovieTypeService service;
 
     /**
      * Factory producing functions for conversion between DTO and entities.
@@ -58,20 +59,23 @@ public class MovieTypeRestController implements MovieTypeController {
     }
 
     /**
-     * @param service service for movieType entity
      * @param factory factory producing functions for conversion between DTO and entities
      * @param uriInfo allows to create {@link UriBuilder} based on current request
      */
     @Inject
     public MovieTypeRestController(
-            MovieTypeService service,
             DtoFunctionFactory factory,
             @SuppressWarnings("CdiInjectionPointsInspection") UriInfo uriInfo
     ) {
-        this.service = service;
         this.factory = factory;
         this.uriInfo = uriInfo;
     }
+
+    @EJB
+    public void setService(MovieTypeService service) {
+        this.service = service;
+    }
+
 
     @Override
     public GetMovieTypesResponse getMovieTypes() {
@@ -95,7 +99,7 @@ public class MovieTypeRestController implements MovieTypeController {
                     .build(id)
                     .toString());
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (TransactionalException ex) {
+        } catch (EJBException ex) {
             if (ex.getCause() instanceof IllegalArgumentException) {
                 log.log(Level.WARNING, ex.getMessage(), ex);
                 throw new BadRequestException(ex);

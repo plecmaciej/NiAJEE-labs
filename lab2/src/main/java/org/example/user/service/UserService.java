@@ -3,9 +3,10 @@ package org.example.user.service;
 import org.example.crypto.component.Pbkdf2PasswordHash;
 import org.example.user.entity.User;
 import org.example.user.repository.api.UserRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.EJB;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,8 @@ import java.util.UUID;
 /**
  * Service layer for all business actions regarding user entity.
  */
-@ApplicationScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class UserService {
 
@@ -77,7 +79,6 @@ public class UserService {
      *
      * @param user new user to be saved
      */
-    @Transactional
     public void create(User user) {
         user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
         repository.create(user);
@@ -119,7 +120,6 @@ public class UserService {
      * @param id user's id
      * @param is input stream containing new avatar
      */
-    @Transactional
     public void updateAvatar(UUID id, InputStream is) {
         repository.find(id).ifPresent(user -> {
             try {
@@ -137,7 +137,6 @@ public class UserService {
      *
      * @param id user's id
      */
-    @Transactional
     public void deleteAvatar(UUID id) {
         repository.find(id).ifPresent(user -> {
             try {

@@ -131,14 +131,14 @@ DELETE http://localhost:9081/simple-movies/api/movies/76658188-838c-484a-ab78-5c
 
 # Register new user.
 
-PUT http://localhost:9081/simple-movies/api/users/71034458-f603-4f87-abd6-27b80ee52f1c
+PUT http://localhost:9081/simple-movies/api/users/81034458-f603-4f87-abd6-27b80ee52f1c
 Content-Type: application/json
 
 {
-  "login": "francis",
-  "name": "Francis",
-  "surname": "FordCopola",
+  "login": "fra2ncis",
+  "name": "Franc2is",
+  "surname": "FordCo2pola",
   "birthDate": "1944-03-21",
-  "email": "francis.copola@gmail.com",
-  "password": "12345678"
+  "email": "franci2s.copola@gmail.com",
+  "password": "123452678"
 }

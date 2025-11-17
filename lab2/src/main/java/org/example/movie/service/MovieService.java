@@ -5,7 +5,8 @@ import org.example.movie.repository.api.MovieRepository;
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.repository.api.MovieTypeRepository;
 import org.example.user.repository.api.UserRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,8 @@ import java.util.UUID;
 /**
  * Service layer for all business actions regarding movie entity.
  */
-@ApplicationScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class MovieService {
 
@@ -82,7 +84,7 @@ public class MovieService {
      *
      * @param movie new movie to be saved
      */
-    @Transactional
+
     public void create(Movie movie) {
         if (movieRepository.find(movie.getId()).isPresent()) {
             throw new IllegalArgumentException("Movie already exists");
@@ -104,12 +106,12 @@ public class MovieService {
      *
      * @param movie movie to be updated
      */
-    @Transactional
+
     public void update(Movie movie) {
         movieRepository.update(movie);
     }
 
-    @Transactional
+
     public void delete(UUID id) {
         movieRepository.delete(movieRepository.find(id).orElseThrow());
     }

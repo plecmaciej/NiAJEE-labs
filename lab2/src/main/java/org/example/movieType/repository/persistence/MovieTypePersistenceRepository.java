@@ -2,7 +2,7 @@ package org.example.movieType.repository.persistence;
 
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.repository.api.MovieTypeRepository;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -16,7 +16,7 @@ import java.util.UUID;
  * safe). Because services are CDI application scoped beans (technically singletons) then repositories must be thread
  * scoped in order to ensure single entity manager for single thread.
  */
-@RequestScoped
+@Dependent
 public class MovieTypePersistenceRepository implements MovieTypeRepository {
 
     /**

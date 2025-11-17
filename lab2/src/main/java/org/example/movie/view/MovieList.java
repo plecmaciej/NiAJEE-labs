@@ -7,6 +7,7 @@ import org.example.movie.service.MovieService;
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.entity.EnumMovieType;
 import org.example.movieType.service.MovieTypeService;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -26,12 +27,12 @@ public class MovieList {
     /**
      * Service for managing movies.
      */
-    private final MovieService movieService;
+    private MovieService movieService;
 
     /**
      * Service for managing movie types.
      */
-    private final MovieTypeService movieTypeService;
+    private MovieTypeService movieTypeService;
 
     /**
      * Movies list exposed to the view.
@@ -63,15 +64,21 @@ public class MovieList {
 
 
     /**
-     * @param movieService     movie service
-     * @param movieTypeService movie type service
-     * @param factory               factory producing functions for conversion between models and entities
-     */
+     * @param factory factory producing functions for conversion between models and entities
+     * */
     @Inject
-    public MovieList(MovieService movieService, MovieTypeService movieTypeService, ModelFunctionFactory factory) {
-        this.movieService = movieService;
-        this.movieTypeService = movieTypeService;
+    public MovieList(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setMovieService(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
+    @EJB
+    public void setMovieTypeService(MovieTypeService movieTypeService) {
+        this.movieTypeService = movieTypeService;
     }
 
     /**

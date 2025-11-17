@@ -6,6 +6,7 @@ import org.example.movie.model.MovieCreateModel;
 import org.example.movieType.model.MovieTypeModel;
 import org.example.movie.service.MovieService;
 import org.example.movieType.service.MovieTypeService;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -31,12 +32,12 @@ public class MovieCreate implements Serializable {
     /**
      * Service for managing movies.
      */
-    private final MovieService movieService;
+    private MovieService movieService;
 
     /**
      * Service for managing movieTypes.
      */
-    private final MovieTypeService movieTypeService;
+    private MovieTypeService movieTypeService;
 
     /**
      * Factory producing functions for conversion between models and entities.
@@ -64,18 +65,22 @@ public class MovieCreate implements Serializable {
 
 
     /**
-     * @param movieService     service for managing movies
-     * @param movieTypeService service for managing movieTypes
      * @param factory               factory producing functions for conversion between models and entities
      */
     @Inject
-    public MovieCreate(
-            MovieService movieService,
-            MovieTypeService movieTypeService,
-            ModelFunctionFactory factory) {
-        this.movieService = movieService;
-        this.movieTypeService = movieTypeService;
+    public MovieCreate(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setMovieService(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
+    @EJB
+    public void setMovieTypeService(MovieTypeService movieTypeService) {
+        this.movieTypeService = movieTypeService;
+
     }
 
     /**

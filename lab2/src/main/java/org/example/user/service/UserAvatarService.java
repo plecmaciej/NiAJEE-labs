@@ -1,7 +1,9 @@
 package org.example.user.service;
 
 import org.example.user.entity.User;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.NotFoundException;
@@ -12,18 +14,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@ApplicationScoped
-@NoArgsConstructor(force = true)
+@Dependent
 public class UserAvatarService {
     /**
      * Path to folder where avatars are stored.
      */
-    private final String fileStorePath;
+    private static final String fileStorePath = "C:\\Users\\jaMPe\\inteliJ\\NiAJEE\\lab2\\avatars";
 
-    @Inject
-    public UserAvatarService(ServletContext servletContext) {
-        this.fileStorePath = servletContext.getInitParameter("avatar_path");
-    }
+    //@Inject
+    //public UserAvatarService(ServletContext servletContext) {
+    //    this.fileStorePath = servletContext.getInitParameter("avatar_path");
+    //}
+
 
     public byte[] getAvatar(User user) throws IOException {
         if (user.getAvatarPath() == null) {

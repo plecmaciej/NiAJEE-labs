@@ -1,11 +1,18 @@
-package org.example.configuration.observer;
+package org.example.configuration.singleton;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import org.example.movie.entity.EnumMovie;
 import org.example.movie.entity.Movie;
 import org.example.movie.service.MovieService;
-import org.example.movieType.entity.MovieType;
 import org.example.movieType.entity.EnumMovieType;
+import org.example.movieType.entity.MovieType;
 import org.example.movieType.service.MovieTypeService;
+
 import org.example.user.entity.User;
 import org.example.user.service.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,10 +20,9 @@ import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.control.RequestContextController;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -24,47 +30,52 @@ import java.util.UUID;
  * Listener started automatically on servlet context initialization.
  * Initializes the application with default example data.
  */
-@ApplicationScoped
+@Singleton
+@Startup
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+@NoArgsConstructor
 public class InitializedData {
 
     /**
      * User service.
      */
-    private final UserService userService;
+    private UserService userService;
 
-    private final MovieTypeService movieTypeService;
+    private MovieTypeService movieTypeService;
 
-    private final MovieService movieService;
+    private MovieService movieService;
 
     /**
-     * The CDI container provides a built-in instance of {@link RequestContextController} that is dependent scoped for
-     * the purposes of activating and deactivating.
+     * @param userService User service.
      */
-    private final RequestContextController requestContextController;
-
+    @EJB
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
     /**
      *
-     * @param userService user service
-     * @param requestContextController CDI request context controller
+     @param movieTypeService Movie type service.
      */
     @Inject
-    public InitializedData(UserService userService,MovieTypeService movieTypeService, MovieService movieService, RequestContextController requestContextController) {
-        this.userService = userService;
+    @EJB
+    public void setMovieTypeService(MovieTypeService movieTypeService) {
         this.movieTypeService = movieTypeService;
-        this.movieService = movieService;
-        this.requestContextController = requestContextController;
     }
 
-    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
+    /**
+     * @param movieService Movie service.
+     */
+    @EJB
+    public void setMovieService(MovieService movieService) {
+        this.movieService = movieService;
     }
 
     /**
      * Initializes example users in the application.
      */
+    @PostConstruct
     @SneakyThrows
     private void init() {
-        requestContextController.activate();
         // Default admin user
         if (userService.find("admin").isEmpty()) {
             User admin = User.builder()
@@ -186,7 +197,7 @@ public class InitializedData {
             movieService.create(romeo);
             movieService.create(smile);
         }
-        requestContextController.deactivate();
+
     }
 
 }

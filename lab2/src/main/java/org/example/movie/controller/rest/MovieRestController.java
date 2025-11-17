@@ -10,9 +10,10 @@ import org.example.movie.entity.Movie;
 import org.example.movie.service.MovieService;
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.service.MovieTypeService;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -37,12 +38,12 @@ public class MovieRestController implements MovieController {
     /**
      * Service layer for all business actions regarding movie entity.
      */
-    private final MovieService movieService;
+    private MovieService movieService;
 
     /**
      * Service layer for all business actions regarding movieType entity.
      */
-    private final MovieTypeService movieTypeService;
+    private MovieTypeService movieTypeService;
 
     /**
      * Factory producing functions for conversion between DTO and entities.
@@ -66,22 +67,28 @@ public class MovieRestController implements MovieController {
     }
 
     /**
-     * @param movieService character service
      * @param factory factory producing functions for conversion between DTO and entities
      * @param uriInfo allows to create {@link UriBuilder} based on current request
      */
     @Inject
     public MovieRestController(
-            MovieService movieService,
-            MovieTypeService movieTypeService,
             DtoFunctionFactory factory,
             @SuppressWarnings("CdiInjectionPointsInspection") UriInfo uriInfo
     ) {
-        this.movieService = movieService;
-        this.movieTypeService = movieTypeService;
         this.factory = factory;
         this.uriInfo = uriInfo;
     }
+
+    @EJB
+    public void setMovieService(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
+    @EJB
+    public void setMovieTypeService(MovieTypeService movieTypeService) {
+        this.movieTypeService = movieTypeService;
+    }
+
 
     @Override
     public GetMoviesResponse getMovies() {
@@ -130,7 +137,7 @@ public class MovieRestController implements MovieController {
                     .build(id)
                     .toString());
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (TransactionalException ex) {
+        } catch (EJBException ex) {
             if (ex.getCause() instanceof IllegalArgumentException) {
                 log.log(Level.WARNING, ex.getMessage(), ex);
                 throw new BadRequestException(ex);

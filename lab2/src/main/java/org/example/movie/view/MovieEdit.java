@@ -5,6 +5,7 @@ import org.example.movie.entity.EnumMovie;
 import org.example.movie.entity.Movie;
 import org.example.movie.model.MovieEditModel;
 import org.example.movie.service.MovieService;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -28,7 +29,7 @@ public class MovieEdit implements Serializable {
     /**
      * Service for managing movies.
      */
-    private final MovieService service;
+    private MovieService service;
 
     /**
      * Factory producing functions for conversion between models and entities.
@@ -56,13 +57,16 @@ public class MovieEdit implements Serializable {
     private MovieEditModel movie;
 
     /**
-     * @param service service for managing movies
      * @param factory factory producing functions for conversion between models and entities
      */
     @Inject
-    public MovieEdit(MovieService service, ModelFunctionFactory factory) {
-        this.service = service;
+    public MovieEdit(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setService(MovieService service) {
+        this.service = service;
     }
 
     /**

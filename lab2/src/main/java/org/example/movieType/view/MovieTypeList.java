@@ -3,6 +3,7 @@ package org.example.movieType.view;
 import org.example.component.ModelFunctionFactory;
 import org.example.movieType.model.MovieTypesModel;
 import org.example.movieType.service.MovieTypeService;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -17,7 +18,7 @@ public class MovieTypeList {
     /**
      * Service for managing movie types.
      */
-    private final MovieTypeService service;
+    private MovieTypeService service;
 
     /**
      * Movies list exposed to the view.
@@ -30,15 +31,18 @@ public class MovieTypeList {
     private final ModelFunctionFactory factory;
 
     /**
-     * @param service movie type service
      * @param factory factory producing functions for conversion between models and entities
      */
     @Inject
-    public MovieTypeList(MovieTypeService service, ModelFunctionFactory factory) {
+    public MovieTypeList(ModelFunctionFactory factory) {
         this.service = service;
         this.factory = factory;
     }
-
+    
+    @EJB
+    public void setService(MovieTypeService service) {
+        this.service = service;
+    }
     /**
      * In order to prevent calling service on different steps of JSF request lifecycle, model property is cached using
      * lazy getter.

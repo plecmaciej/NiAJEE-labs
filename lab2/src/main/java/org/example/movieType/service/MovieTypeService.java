@@ -1,9 +1,9 @@
 package org.example.movieType.service;
 
 import org.example.movieType.entity.MovieType;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import org.example.movieType.repository.api.MovieTypeRepository;
 
@@ -14,7 +14,8 @@ import java.util.UUID;
 /**
  * Service layer for all business actions regarding movieType entity.
  */
-@ApplicationScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class MovieTypeService {
 
@@ -52,7 +53,6 @@ public class MovieTypeService {
      *
      * @param movieType new movieType to be saved
      */
-    @Transactional
     public void create(MovieType movieType) {
         repository.create(movieType);
     }
@@ -62,7 +62,6 @@ public class MovieTypeService {
      *
      * @param movieType movieType to be updated
      */
-    @Transactional
     public void update(MovieType movieType) {
         repository.update(movieType);
     }
@@ -71,7 +70,6 @@ public class MovieTypeService {
      *
      * @param id movieType's id to be deleted
      */
-    @Transactional
     public void delete(UUID id) {
         repository.delete(repository.find(id).orElseThrow());
     }
