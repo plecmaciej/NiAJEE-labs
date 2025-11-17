@@ -1,23 +1,30 @@
 package org.example.component;
 
-import org.example.movie.dto.function.*;
+import org.example.movie.dto.GetMovieResponse;
+import org.example.movie.dto.GetMoviesResponse;
 import org.example.movie.dto.PatchMovieRequest;
 import org.example.movie.dto.PutMovieRequest;
-import org.example.movieType.dto.function.MovieTypeToResponseFunction;
+import org.example.movie.dto.function.MovieToResponseFunction;
+import org.example.movie.dto.function.MoviesToResponseFunction;
+import org.example.movie.dto.function.RequestToMovieFunction;
+import org.example.movie.dto.function.UpdateMovieWithRequestFunction;
+import org.example.movie.entity.Movie;
 import org.example.movieType.dto.GetMovieTypeResponse;
 import org.example.movieType.dto.GetMovieTypesResponse;
+import org.example.movieType.dto.function.MovieTypeToResponseFunction;
 import org.example.movieType.dto.function.MovieTypesToResponseFunction;
 import org.example.movieType.dto.function.RequestToMovieTypeFunction;
 import org.example.movieType.dto.function.UpdateMovieTypeWithRequestFunction;
 import org.example.movieType.entity.MovieType;
-import org.example.user.dto.function.UserToResponseFunction;
 import org.example.user.dto.GetUserResponse;
 import org.example.user.dto.GetUsersResponse;
+import org.example.user.dto.PutUserRequest;
+import org.example.user.dto.function.RequestToUserFunction;
+import org.example.user.dto.function.UserToResponseFunction;
 import org.example.user.dto.function.UsersToResponseFunction;
-import org.example.movie.dto.GetMovieResponse;
-import org.example.movie.dto.GetMoviesResponse;
+
 import org.example.user.entity.User;
-import org.example.movie.entity.Movie;
+
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -47,8 +54,18 @@ public class DtoFunctionFactory {
     public UsersToResponseFunction usersToResponse() {
         return new UsersToResponseFunction();
     }
-    
-    
+
+    /**
+     * Returns a function to convert a {@link PutUserRequest} to a {@link User}.
+     *
+     * @return UserToResponseFunction instance
+     */
+    public RequestToUserFunction requestToUser() {
+        return new RequestToUserFunction();
+    }
+
+
+
 
     public MovieTypeToResponseFunction MovieTypeToResponse() {
         return new MovieTypeToResponseFunction();

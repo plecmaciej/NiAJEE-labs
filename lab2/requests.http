@@ -128,3 +128,17 @@ Content-Type: application/json
 DELETE http://localhost:9081/simple-movies/api/movies/76658188-838c-484a-ab78-5c1316f02609
 
 ###
+
+# Register new user.
+
+PUT http://localhost:9081/simple-movies/api/users/71034458-f603-4f87-abd6-27b80ee52f1c
+Content-Type: application/json
+
+{
+  "login": "francis",
+  "name": "Francis",
+  "surname": "FordCopola",
+  "birthDate": "1944-03-21",
+  "email": "francis.copola@gmail.com",
+  "password": "12345678"
+}
