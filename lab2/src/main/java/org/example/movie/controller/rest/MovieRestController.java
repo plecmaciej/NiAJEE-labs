@@ -10,6 +10,8 @@ import org.example.movie.entity.Movie;
 import org.example.movie.service.MovieService;
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.service.MovieTypeService;
+import org.example.user.entity.UserRoles;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
@@ -33,6 +35,7 @@ import java.util.logging.Level;
  */
 @Path("")
 @Log
+@RolesAllowed(UserRoles.USER)//Secure implementation, not the interface
 public class MovieRestController implements MovieController {
 
     /**
@@ -103,6 +106,14 @@ public class MovieRestController implements MovieController {
     }
 
     @Override
+    public GetMoviesResponse getUserMovies(UUID id) {
+        return movieService.findAllByUser(id)
+                .map(factory.MoviesToResponse())
+                .orElseThrow(NotFoundException::new);
+    }
+
+
+    @Override
     public GetMovieResponse getMovie(UUID id) {
         return movieService.find(id)
                 .map(factory.MovieToResponse())
@@ -129,9 +140,7 @@ public class MovieRestController implements MovieController {
 
             MovieType movieType = movieTypeService.find(typeId).orElseThrow(NotFoundException::new);
             movie.setMovieType(movieType);
-            movieType.getMovies().add(movie);
-            movieTypeService.update(movieType);
-//            movieService.create(movie);
+            movieService.createForCallerPrincipal(movie);
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(MovieController.class, "getMovie")
                     .build(id)

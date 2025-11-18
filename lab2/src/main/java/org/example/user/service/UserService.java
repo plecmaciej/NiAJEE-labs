@@ -1,16 +1,21 @@
 package org.example.user.service;
 
-import org.example.crypto.component.Pbkdf2PasswordHash;
 import org.example.user.entity.User;
+import org.example.user.entity.UserRoles;
 import org.example.user.repository.api.UserRepository;
-import jakarta.ejb.EJB;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,21 +44,36 @@ public class UserService {
     private final UserAvatarService userAvatarService;
 
     /**
-     * @param repository   repository for character entity
-     * @param passwordHash hash mechanism used for storing users' passwords
+
+     * Security context
+     */
+    private final SecurityContext securityContext;
+
+    /**
+     * @param repository      repository for character entity
+     * @param passwordHash    hash mechanism used for storing users' passwords
+     * @param securityContext security context
      */
     @Inject
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash, UserAvatarService userAvatarService) {
+    public UserService(
+            UserRepository repository,
+            @SuppressWarnings("CdiInjectionPointsInspection") Pbkdf2PasswordHash passwordHash,
+            UserAvatarService userAvatarService,
+            @SuppressWarnings("CdiInjectionPointsInspection") SecurityContext securityContext
+    ) {
         this.repository = repository;
         this.passwordHash = passwordHash;
         this.userAvatarService = userAvatarService;
+        this.securityContext = securityContext;
     }
 
     /**
      * @param id user's id
      * @return container (can be empty) with user
      */
+    @RolesAllowed(UserRoles.USER)
     public Optional<User> find(UUID id) {
+        checkAdminRoleOrOwner(repository.find(id));
         return repository.find(id);
     }
 
@@ -63,6 +83,7 @@ public class UserService {
      * @param login user's login
      * @return container (can be empty) with user
      */
+    @RolesAllowed(UserRoles.ADMIN)
     public Optional<User> find(String login) {
         return repository.findByLogin(login);
     }
@@ -70,6 +91,7 @@ public class UserService {
     /**
      * @return all available users
      */
+    @RolesAllowed(UserRoles.ADMIN)
     public List<User> findAll() {
         return repository.findAll();
     }
@@ -79,8 +101,12 @@ public class UserService {
      *
      * @param user new user to be saved
      */
+    @PermitAll
     public void create(User user) {
         user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(List.of(UserRoles.USER));
+        }
         repository.create(user);
     }
 
@@ -89,6 +115,7 @@ public class UserService {
      * @param password user's password
      * @return true if provided login and password are correct
      */
+    @PermitAll
     public boolean verify(String login, String password) {
         return find(login)
                 .map(user -> passwordHash.verify(password.toCharArray(), user.getPassword()))
@@ -101,8 +128,10 @@ public class UserService {
      * @param id user's id
      * @return byte array containing user's avatar
      */
+    @RolesAllowed(UserRoles.USER)
     public byte[] getAvatar(UUID id) {
         Optional<User> user = repository.find(id);
+        checkAdminRoleOrOwner(user);
         if (user.isPresent()) {
             try {
                 return userAvatarService.getAvatar(user.get());
@@ -120,7 +149,9 @@ public class UserService {
      * @param id user's id
      * @param is input stream containing new avatar
      */
+    @RolesAllowed(UserRoles.USER)
     public void updateAvatar(UUID id, InputStream is) {
+        checkAdminRoleOrOwner(repository.find(id));
         repository.find(id).ifPresent(user -> {
             try {
                 byte[] avatar = is.readAllBytes();
@@ -137,7 +168,9 @@ public class UserService {
      *
      * @param id user's id
      */
+    @RolesAllowed(UserRoles.USER)
     public void deleteAvatar(UUID id) {
+        checkAdminRoleOrOwner(repository.find(id));
         repository.find(id).ifPresent(user -> {
             try {
                 userAvatarService.deleteAvatar(user);
@@ -146,6 +179,22 @@ public class UserService {
             }
             repository.update(user);
         });
+    }
+
+    /**
+     * @param user user to be checked
+     * @throws EJBAccessException when caller principal has no admin role and is not character's owner
+     */
+    private void checkAdminRoleOrOwner(Optional<User> user) throws EJBAccessException {
+        if (securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            return;
+        }
+        if (securityContext.isCallerInRole(UserRoles.USER)
+                && user.isPresent()
+                && user.get().getLogin().equals(securityContext.getCallerPrincipal().getName())) {
+            return;
+        }
+        throw new EJBAccessException("Caller not authorized.");
     }
 
 }

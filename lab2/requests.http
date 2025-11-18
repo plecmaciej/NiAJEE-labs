@@ -1,25 +1,35 @@
 # Get all users.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/users
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 ###
 
 # Get single user.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Get single user avatar.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Create user avatar.
 
+// @no-cookie-jar
 PUT http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
 Content-Type: multipart/form-data; boundary=boundary
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+
 
 --boundary
 Content-Disposition: form-data; name="avatar"; filename="rob.png'
@@ -27,31 +37,48 @@ Content-Disposition: form-data; name="avatar"; filename="rob.png'
 < src/main/resources/rob.png
 --boundary--
 
+###
+
+# Get single user avatar.
+
+// @no-cookie-jar
+GET http://localhost:9081/simple-movies/api/users/c4a04a73-f6e0-4996-a465-3b85f2ad1ea3/avatar
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 ###
 
 # Delete user's avatar.
 
+// @no-cookie-jar
 DELETE http://localhost:9081/simple-movies/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/avatar
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 ###
 
 # Get all movie types.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/movieTypes
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+#Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Get single movie type.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 ###
 
 # Create new movie type
 
+// @no-cookie-jar
 PUT http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952
 Content-Type: application/json
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 {
   "typeName": "SCI-FI",
@@ -63,8 +90,11 @@ Content-Type: application/json
 
 # Update existing movie type
 
+// @no-cookie-jar
 PATCH http://localhost:9081/simple-movies/api/movieTypes/bbb60000-1a7d-45cb-b6ac-3812c8f8eb3d
 Content-Type: application/json
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+#Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 {
   "typeName": "Changed",
@@ -74,32 +104,49 @@ Content-Type: application/json
 ###
 
 # Delete existing movie type
+
+// @no-cookie-jar
 DELETE http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Get all movies.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/movies
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
+
 
 ###
 
 # Get single movie.
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/movie/76658188-838c-484a-ab78-5c1316f02609
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Get all movie type movies
 
+// @no-cookie-jar
 GET http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 ###
 
 # Create new movie
 
-PUT http://localhost:9081/simple-movies/api/movieTypes/8d48d3fb-ffde-4646-bb58-0e59a2909952/movies/76658188-838c-484a-ab78-5c1316f02609
+// @no-cookie-jar
+PUT http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies/76658188-838c-484a-ab78-5c1316f02609
 Content-Type: application/json
+Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
+#Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 {
   "title": "Robocop",
@@ -112,8 +159,12 @@ Content-Type: application/json
 
 # Update existing movie
 
+// @no-cookie-jar
 PATCH http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
+#PATCH http://localhost:9081/simple-movies/api/movieTypes/47fc4252-9c4e-4b61-8042-05648be14bc0/movies/76658188-838c-484a-ab78-5c1316f02609
 Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
+#Authorization: Basic ZGFuaWVsOnVzZXJ1c2Vy #daniel:user
 
 {
   "title": "Changed",
@@ -125,20 +176,26 @@ Content-Type: application/json
 
 # Delete existing movie
 
+// @no-cookie-jar
+#DELETE http://localhost:9081/simple-movies/api/movies/d8422238-ce90-4c9b-87ec-cd75f2bb32f3
 DELETE http://localhost:9081/simple-movies/api/movies/76658188-838c-484a-ab78-5c1316f02609
+#Authorization: Basic dXNlcjp1c2VydXNlcg== #daniel:user
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg== #admin:admin
 
 ###
 
 # Register new user.
 
+// @no-cookie-jar
 PUT http://localhost:9081/simple-movies/api/users/81034458-f603-4f87-abd6-27b80ee52f1c
 Content-Type: application/json
+#Authorization: Basic dXNlcjp1c2VydXNlcg== #francis:user
 
 {
-  "login": "fra2ncis",
+  "login": "user",
   "name": "Franc2is",
   "surname": "FordCo2pola",
   "birthDate": "1944-03-21",
   "email": "franci2s.copola@gmail.com",
-  "password": "123452678"
+  "password": "useruser"
 }

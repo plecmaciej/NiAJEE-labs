@@ -1,18 +1,16 @@
 package org.example.configuration.singleton;
 
+import org.example.user.entity.UserRoles;
 import jakarta.annotation.PostConstruct;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
-import jakarta.ejb.TransactionAttribute;
-import jakarta.ejb.TransactionAttributeType;
+import jakarta.annotation.security.DeclareRoles;
+import jakarta.annotation.security.RunAs;
+import jakarta.ejb.*;
 import org.example.movie.entity.EnumMovie;
 import org.example.movie.entity.Movie;
 import org.example.movie.service.MovieService;
 import org.example.movieType.entity.EnumMovieType;
 import org.example.movieType.entity.MovieType;
 import org.example.movieType.service.MovieTypeService;
-
 import org.example.user.entity.User;
 import org.example.user.service.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +20,10 @@ import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,6 +34,10 @@ import java.util.UUID;
 @Startup
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 @NoArgsConstructor
+@DependsOn("InitializeAdminService")
+@DeclareRoles({UserRoles.ADMIN, UserRoles.USER})
+@RunAs(UserRoles.ADMIN)
+@Log
 public class InitializedData {
 
     /**
@@ -56,7 +60,7 @@ public class InitializedData {
      *
      @param movieTypeService Movie type service.
      */
-    @Inject
+
     @EJB
     public void setMovieTypeService(MovieTypeService movieTypeService) {
         this.movieTypeService = movieTypeService;
@@ -78,6 +82,7 @@ public class InitializedData {
     private void init() {
         // Default admin user
         if (userService.find("admin").isEmpty()) {
+
             User admin = User.builder()
                     .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                     .login("admin")
@@ -86,6 +91,7 @@ public class InitializedData {
                     .birthDate(LocalDate.of(1990, 10, 21))
                     .email("admin@example.com")
                     .password("adminadmin")
+                    .roles(List.of(UserRoles.ADMIN, UserRoles.USER))
                     .build();
 
             // Example users
@@ -97,6 +103,7 @@ public class InitializedData {
                     .birthDate(LocalDate.of(1998, 5, 14))
                     .email("emily.stone@example.com")
                     .password("useruser")
+                    .roles(List.of(UserRoles.USER))
                     .build();
 
             User daniel = User.builder()
@@ -107,6 +114,7 @@ public class InitializedData {
                     .birthDate(LocalDate.of(1995, 9, 23))
                     .email("daniel.frost@example.com")
                     .password("useruser")
+                    .roles(List.of(UserRoles.USER))
                     .build();
 
             User sophia = User.builder()
@@ -117,6 +125,7 @@ public class InitializedData {
                     .birthDate(LocalDate.of(2000, 2, 11))
                     .email("sophia.miller@example.com")
                     .password("useruser")
+                    .roles(List.of(UserRoles.USER))
                     .build();
 
             User michael = User.builder()
@@ -127,6 +136,7 @@ public class InitializedData {
                     .birthDate(LocalDate.of(1997, 12, 3))
                     .email("michael.reed@example.com")
                     .password("useruser")
+                    .roles(List.of(UserRoles.USER))
                     .build();
 
             // Save users

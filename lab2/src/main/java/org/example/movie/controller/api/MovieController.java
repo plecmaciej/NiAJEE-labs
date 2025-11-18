@@ -33,6 +33,16 @@ public interface MovieController {
     @Produces(MediaType.APPLICATION_JSON)
     GetMoviesResponse getMovieTypeMovies(@PathParam("id") UUID id);
 
+
+    /**
+     * @param id user's id
+     * @return movies representation
+     */
+    @GET
+    @Path("/users/{id}/movies/")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetMoviesResponse getUserMovies(@PathParam("id") UUID id);
+    
     /**
      * @param id movie's id
      * @return movie representation

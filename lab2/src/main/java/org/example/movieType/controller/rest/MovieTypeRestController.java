@@ -8,13 +8,11 @@ import org.example.movieType.dto.PatchMovieTypeRequest;
 import org.example.movieType.dto.PutMovieTypeRequest;
 import org.example.movieType.service.MovieTypeService;
 import jakarta.ejb.EJB;
+import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -103,6 +101,8 @@ public class MovieTypeRestController implements MovieTypeController {
             if (ex.getCause() instanceof IllegalArgumentException) {
                 log.log(Level.WARNING, ex.getMessage(), ex);
                 throw new BadRequestException(ex);
+            } else if (ex instanceof EJBAccessException) {
+                throw new NotAuthorizedException(ex);
             }
             throw ex;
         }
@@ -110,22 +110,33 @@ public class MovieTypeRestController implements MovieTypeController {
 
     @Override
     public void patchMovieType(UUID id, PatchMovieTypeRequest request) {
-        service.find(id).ifPresentOrElse(
-                entity -> service.update(factory.updateMovieType().apply(entity, request)),
-                () -> {
-                    throw new NotFoundException();
-                }
-        );
+        try {
+            service.find(id).ifPresentOrElse(
+
+                    entity -> service.update(factory.updateMovieType().apply(entity, request)),
+                    () -> {
+                        throw new NotFoundException();
+                    }
+            );
+        } catch (EJBException ex) {
+            throw new NotFoundException();
+        }
+
     }
 
     @Override
     public void deleteMovieType(UUID id) {
-        service.find(id).ifPresentOrElse(
-                entity -> service.delete(id),
-                () -> {
-                    throw new NotFoundException();
-                }
-        );
+        try {
+            service.find(id).ifPresentOrElse(
+                    entity -> service.delete(id),
+                    () -> {
+                        throw new NotFoundException();
+                    }
+            );
+        } catch (EJBAccessException ex) {
+            throw new NotAuthorizedException(ex);
+        }
+
     }
 
 }

@@ -2,8 +2,10 @@ package org.example.movie.repository.persistence;
 
 import org.example.movie.entity.Movie;
 import org.example.movieType.entity.MovieType;
+import org.example.user.entity.User;
 import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.example.movie.repository.api.MovieRepository;
 
@@ -34,6 +36,25 @@ public class MoviePersistenceRepository implements MovieRepository {
     public List<Movie> findAllByMovieType(MovieType movieType) {
         return em.createQuery("select m from Movie m where m.movieType = :movieType", Movie.class)
                 .setParameter("movieType", movieType)
+                .getResultList();
+    }
+
+    @Override
+    public Optional<Movie> findByIdAndUser(UUID id, User user) {
+        try {
+            return Optional.of(em.createQuery("select m from Movie m where m.id = :id and m.user = :user", Movie.class)
+                    .setParameter("user", user)
+                    .setParameter("id", id)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Movie> findAllByUser(User user) {
+        return em.createQuery("select m from Movie m where m.user = :user", Movie.class)
+                .setParameter("user", user)
                 .getResultList();
     }
 

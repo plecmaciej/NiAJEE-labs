@@ -1,11 +1,16 @@
 package org.example.movieType.service;
 
 import org.example.movieType.entity.MovieType;
+import org.example.movieType.repository.api.MovieTypeRepository;
+import org.example.user.entity.UserRoles;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import lombok.NoArgsConstructor;
-import org.example.movieType.repository.api.MovieTypeRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +42,7 @@ public class MovieTypeService {
      * @param id movieType's id
      * @return container with movieType entity
      */
+    @RolesAllowed(UserRoles.USER)
     public Optional<MovieType> find(UUID id) {
         return repository.find(id);
     }
@@ -44,6 +50,7 @@ public class MovieTypeService {
     /**
      * @return all available movieTypes
      */
+    @RolesAllowed(UserRoles.USER)
     public List<MovieType> findAll() {
         return repository.findAll();
     }
@@ -53,6 +60,7 @@ public class MovieTypeService {
      *
      * @param movieType new movieType to be saved
      */
+    @RolesAllowed(UserRoles.ADMIN)
     public void create(MovieType movieType) {
         repository.create(movieType);
     }
@@ -62,6 +70,7 @@ public class MovieTypeService {
      *
      * @param movieType movieType to be updated
      */
+    @RolesAllowed(UserRoles.ADMIN)
     public void update(MovieType movieType) {
         repository.update(movieType);
     }
@@ -70,8 +79,10 @@ public class MovieTypeService {
      *
      * @param id movieType's id to be deleted
      */
+    @RolesAllowed(UserRoles.ADMIN)
     public void delete(UUID id) {
         repository.delete(repository.find(id).orElseThrow());
     }
+
 
 }
